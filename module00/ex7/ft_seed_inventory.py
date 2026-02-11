@@ -16,8 +16,6 @@ def ft_seed_inventory(seed_type: str, quantity: int, unit: str) -> None:
 
 # import sys
 # if __name__ == "__main__":
-#     # sys.argv[0] = nombre del script
-#     # sys.argv[1] = primer argumento, etc.
 #     seed_type = sys.argv[1]
 #     quantity = int(sys.argv[2])
 #     unit = sys.argv[3]
