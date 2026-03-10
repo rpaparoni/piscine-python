@@ -27,7 +27,7 @@ class SecurePlant:
 
 if __name__ == "__main__":
 
-    rose = SecurePlant('Rose', 25, 30)
+    rose = SecurePlant('Rose', 0, 0)
 
     print("=== Garden Security System ===")
     print(f"Plant created: {rose.name}")
