@@ -48,26 +48,26 @@ class GardenManager:
         print("Plants in garden:")
         i: int = 0
         regular: int = 0
-        florewerin: int = 0
+        florewering: int = 0
         prize_flower: int = 0
         while i < len(self.plants):
             plant = self.plants[i]
             text: str = f"- {plant.name}: {plant.height}cm"
             if isinstance(plant, FloweringPlant):
                 if plant.is_blooming:
-                    text += " (bloming)"
+                    text += " (blooming)"
             print(text)
             if isinstance(plant, PrizeFlower):
                 prize_flower += 1
             elif isinstance(plant, FloweringPlant):
-                florewerin += 1
+                florewering += 1
             else:
                 regular += 1
             i += 1
         print(f"\nPlants added: {i}, Total growth: {i}cm")
         print(
             f"Plant types: {regular} regular. "
-            f"{florewerin} flowering, "
+            f"{florewering} flowering, "
             f"{prize_flower} prize flowers"
             )
 
