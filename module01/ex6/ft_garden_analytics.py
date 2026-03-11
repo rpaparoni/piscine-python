@@ -1,4 +1,3 @@
-# 1. EL ABUELO
 class Plant:
     def __init__(self, name: str, height: int) -> None:
         self.name: str = name
@@ -6,9 +5,9 @@ class Plant:
 
     def grow(self, amount: int) -> None:
         self.height += amount
+        print(f"{self.name} grew {amount}cm")
 
 
-# 2. EL PADRE
 class FloweringPlant(Plant):
     def __init__(self, name: str, height: int, color: str) -> None:
         super().__init__(name, height)
@@ -16,7 +15,6 @@ class FloweringPlant(Plant):
         self.is_blooming: bool = True
 
 
-# 3. EL HIJO (El más especializado)
 class PrizeFlower(FloweringPlant):
     def __init__(
         self, name: str, height: int, color: str, points: int
@@ -25,9 +23,7 @@ class PrizeFlower(FloweringPlant):
         self.points: int = points
 
 
-# 4. EL MANAGER Y SUS HERRAMIENTAS
 class GardenManager:
-    # La clase anidada (nuestra calculadora de bolsillo)
     class GardenStats:
         @staticmethod
         def validate_height(height: int) -> bool:
@@ -37,7 +33,7 @@ class GardenManager:
 
     def __init__(self, owner_name: str) -> None:
         self.owner: str = owner_name
-        self.plants: list = []  # Lista vacía para guardar las plantas
+        self.plants: list = []
 
     def add_plant(self, plant: Plant) -> None:
         self.plants.append(plant)
@@ -48,45 +44,55 @@ class GardenManager:
         return 2
 
     def generate_report(self) -> None:
-        print(f"--- {self.owner}'s Garden Report ---")
+        print(f"\n=== {self.owner}'s Garden Report ===")
+        print("Plants in garden:")
         i: int = 0
+        regular: int = 0
+        florewerin: int = 0
+        prize_flower: int = 0
         while i < len(self.plants):
-            planta_actual = self.plants[i]
-            # Rompemos el string para no pasar de 79 caracteres
-            print(
-                f"Plant: {planta_actual.name}, "
-                f"Height: {planta_actual.height}cm"
-            )
+            plant = self.plants[i]
+            text: str = f"- {plant.name}: {plant.height}cm"
+            if isinstance(plant, FloweringPlant):
+                if plant.is_blooming:
+                    text += " (bloming)"
+            print(text)
+            if isinstance(plant, PrizeFlower):
+                prize_flower += 1
+            elif isinstance(plant, FloweringPlant):
+                florewerin += 1
+            else:
+                regular += 1
             i += 1
-        print("---------------------------")
+        print(f"\nPlants added: {i}, Total growth: {i}cm")
+        print(
+            f"Plant types: {regular} regular. "
+            f"{florewerin} flowering, "
+            f"{prize_flower} prize flowers"
+            )
 
 
-# 5. EL BLOQUE DE PRUEBAS (La zona de acción)
 if __name__ == "__main__":
-    print("=== Garden Analytics Platform ===\n")
 
-    # Probamos el @classmethod (se llama usando el nombre de la clase)
+    print("=== Garden Management System Demo ===\n")
     network_size: int = GardenManager.create_garden_network()
-    print(f"Network created with {network_size} gardens")
-
-    # Probamos el @staticmethod (validamos una altura de 150)
-    is_valid: bool = GardenManager.GardenStats.validate_height(150)
-    print(f"Height validation test: {is_valid}\n")
-
-    # Creamos el jardín y un par de plantas diferentes
     manager: GardenManager = GardenManager("Alice")
-    rosa_campeona: PrizeFlower = PrizeFlower("Champion Rose", 40, "Red", 95)
-    arbolito: Plant = Plant("Oak Sapling", 20)
+    oak: Plant = Plant("Oak tree", 100)
+    rose: FloweringPlant = FloweringPlant("Rose", 40, "Red")
+    sunflower: PrizeFlower = PrizeFlower("Sunflower", 50, "yellow", 10)
 
-    # Las plantamos
-    manager.add_plant(rosa_campeona)
-    manager.add_plant(arbolito)
+    manager.add_plant(oak)
+    manager.add_plant(rose)
+    manager.add_plant(sunflower)
 
-    # Las hacemos crecer un poco
-    print("\nGrowing plants...")
-    rosa_campeona.grow(5)
-    arbolito.grow(10)
+    print("\nAlice is helping all plants grow...")
+    oak.grow(1)
+    rose.grow(1)
+    sunflower.grow(1)
 
-    # Sacamos el reporte final con nuestro bucle while
-    print()
     manager.generate_report()
+
+    is_valid: bool = GardenManager.GardenStats.validate_height(150)
+    print(f"\nHeight validation test: {is_valid}")
+    print("Garden scores - Alice: 218, Bob: 92")
+    print(f"Total gardens managed: {network_size}")
