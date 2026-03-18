@@ -1,4 +1,4 @@
-def check_temperature(temp_str) -> None:
+def check_temperature(temp_str: str) -> None:
     try:
         n: int = int(temp_str)
     except ValueError:
