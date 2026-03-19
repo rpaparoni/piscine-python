@@ -14,10 +14,22 @@ def check_plant_health(
                 "is too high (max 10)"
             )
             raise ValueError(error)
+        elif water_level < 1:
+            error = (
+                f"Error: Water level {water_level} "
+                "is too low (min 1)"
+            )
+            raise ValueError(error)
         elif sunlight_hours < 2:
             error = (
                 f"Error: Sunlight hours {sunlight_hours} "
                 "is too low (min 2)"
+            )
+            raise ValueError(error)
+        elif sunlight_hours > 12:
+            error = (
+                f"Error: Water level {water_level} "
+                "is too high (max 10)"
             )
             raise ValueError(error)
     except ValueError as error:
@@ -29,7 +41,7 @@ def check_plant_health(
 def test_plant_checks() -> None:
 
     print("Testing good values...")
-    check_plant_health('tomato', 10, 10)
+    check_plant_health('tomato', 0, 10)
     print("\nTesting empty plant name...")
     check_plant_health(None, 10, 10)
     print("\nTesting bad water level...")

@@ -28,7 +28,7 @@ def garden_operations() -> None:
     except (ValueError, ZeroDivisionError):
         print("Caught an error, but program continues!\n")
 
-
+# test_error_types() 
 if __name__ == "__main__":
     print("=== Garden Error Types Demo ===\n")
     garden_operations()
