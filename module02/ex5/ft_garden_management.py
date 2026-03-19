@@ -43,7 +43,7 @@ class GardenManager:
 
             if data[0] > 10:
                 error = (
-                    f"Error: Water level {data[0]} "
+                    f"Error checking {plant_name}: Water level {data[0]} "
                     "is too high (max 10)"
                 )
                 raise ValueError(error)
@@ -80,16 +80,16 @@ def test_garden_management() -> None:
     print("\nChecking plant health...")
     GardenManager.check_plants(garden, tomato[0])
     GardenManager.check_plants(garden, lettuce[0])
-    print("Testing PlantError...")
+    print("\nTesting error recovery...")
     try:
         raise WaterError("Not enough water in the tank!")
     except WaterError as error:
         print(f"Caught  GardenError: {error}")
     finally:
         print("System recovered and continuing...")
-    print("\nGarden management system test complete!")
 
 
 if __name__ == "__main__":
     print("=== Garden Management System ===\n")
     test_garden_management()
+    print("\nGarden management system test complete!")
