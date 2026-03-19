@@ -12,7 +12,7 @@ class GardenManager:
 
         try:
             if plant_list[0] is None:
-                error = "Error: Plant name cannot be empty!"
+                error = "Error adding plant: Plant name cannot be empty!"
                 raise ValueError(error)
         except ValueError as error:
             print(error)
