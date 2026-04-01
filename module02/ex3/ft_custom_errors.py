@@ -1,20 +1,19 @@
-# los errores van dentro de la clase
 class GardenError(Exception):
-    def __init__(self, text: str) -> None:
+    def __init__(self, text: str = "Unknown garden error") -> None:
         super().__init__(text)
 
 
 class PlantError(GardenError):
-    def __init__(self, text: str) -> None:
+    def __init__(self, text: str = "Unknown garden error") -> None:
         super().__init__(text)
 
 
 class WaterError(GardenError):
-    def __init__(self, text: str) -> None:
+    def __init__(self, text: str = "Unknown garden error") -> None:
         super().__init__(text)
 
-# test_error_types()
-if __name__ == "__main__":
+
+def test_error_types():
     print("=== Custom Garden Errors Demo ===\n")
     print("Testing PlantError...")
     try:
@@ -36,3 +35,7 @@ if __name__ == "__main__":
     except GardenError as error:
         print(f"Caught a garden error: {error}")
     print("\nAll custom error types work correctly!")
+
+
+if __name__ == "__main__":
+    test_error_types()
