@@ -12,7 +12,7 @@ def water_plants(plant_name: str) -> None:
     error: str
 
     if plant_name != plant_name.capitalize():
-        error = f" Invalid plant name to water: {plant_name}"
+        error = f"Invalid plant name to water: '{plant_name}'"
         raise PlantError(error)
     else:
         print(f"Watering {plant_name}: [OK]")
@@ -22,6 +22,7 @@ def test_watering_system() -> None:
     print("=== Garden Watering System ===\n")
     print("Testing valid plants...")
     try:
+        print("Opening watering system")
         water_plants("Tomato")
         water_plants("Lettuce")
         water_plants("Carrots")
@@ -31,6 +32,7 @@ def test_watering_system() -> None:
         print("Closing watering system\n")
     print("Testing invalid plants...")
     try:
+        print("Opening watering system")
         water_plants("Tomato")
         water_plants("lettuce")
     except PlantError as error:
