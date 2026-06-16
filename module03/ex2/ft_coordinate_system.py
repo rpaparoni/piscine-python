@@ -27,6 +27,7 @@ def get_player_pos() -> tuple:
             except ValueError as error:
                 clean_param: str = param.strip()
                 print(f"Error on parameter '{clean_param}': {error}")
+    return (0.0, 0.0, 0.0)
 
 
 def calc_distance(p1: tuple, p2: tuple) -> float:
@@ -35,7 +36,8 @@ def calc_distance(p1: tuple, p2: tuple) -> float:
     dy: float = (p2[1] - p1[1]) ** 2
     dz: float = (p2[2] - p1[2]) ** 2
 
-    return math.sqrt(dx + dy + dz)
+    result: float = math.sqrt(dx + dy + dz)
+    return result
 
 
 def main() -> None:
