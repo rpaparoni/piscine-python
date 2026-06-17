@@ -24,10 +24,11 @@ def archive_creation(filename: str) -> None:
         new_content: str = ""
 
         for line in original_lines:
+            new_line: str = ""
             if line.endswith("\n"):
-                new_line: str = line[:-1] + "#\n"
+                new_line = line[:-1] + "#\n"
             else:
-                new_line: str = line + "#\n"
+                new_line = line + "#\n"
 
             print(new_line, end="")
             new_content += new_line

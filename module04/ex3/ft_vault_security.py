@@ -15,7 +15,7 @@ def secure_archive(filen: str, action: str = "r", content: str = "") -> tuple:
 
     except Exception as error:
         return (False, f"{error}")
-
+    return (False, "Invalid action")
 
 def main() -> None:
     print("=== Cyber Archives Security ===\n")
