@@ -4,18 +4,18 @@ import sys
 def read_ancient_fragment(filename: str) -> None:
     print("=== Cyber Archives Recovery ===")
     print(f"Accessing file '{filename}'")
-    
+
     try:
         file_to_read = open(filename, "r")
         print("---\n")
-        
+
         text = file_to_read.read()
         print(f"{text}")
-        
+
         file_to_read.close()
         print("\n---")
         print(f"File '{filename}' closed.")
-        
+
     except Exception as error:
         print(f"Error opening file '{filename}': {error}")
 

@@ -5,7 +5,7 @@ import typing
 def archive_creation(filename: str) -> None:
     print("=== Cyber Archives Recovery & Preservation ===")
     print(f"Accessing file '{filename}'")
-    
+
     try:
         file_to_read: typing.IO = open(filename, "r")
         print("---\n")
@@ -14,11 +14,11 @@ def archive_creation(filename: str) -> None:
         for line in file_to_read:
             print(line, end="")
             original_lines += [line]
-            
+
         file_to_read.close()
         print("\n\n---")
         print(f"File '{filename}' closed.\n")
-        
+
         print("Transform data:")
         print("---\n")
         new_content: str = ""
@@ -28,13 +28,13 @@ def archive_creation(filename: str) -> None:
                 new_line: str = line[:-1] + "#\n"
             else:
                 new_line: str = line + "#\n"
-                
+
             print(new_line, end="")
             new_content += new_line
         print("\n---")
 
         new_filename: str = input("Enter new file name (or empty): ")
-        
+
         if new_filename == "":
             print("Not saving data.")
         else:
