@@ -73,3 +73,11 @@ class TextProcessor(DataProcessor):
             for item in data:
                 self._data.append((self._rank_counter, item))
                 self._rank_counter += 1
+
+
+if __name__ == "__main__":
+    text = TextProcessor()
+    if text.validate(1) is True:
+        print("hola")
+    else:
+        print("xd")
