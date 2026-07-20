@@ -2,6 +2,24 @@ import abc
 import typing
 
 
+class DataStream():
+    def __init__(self):
+        self.registered_processors: list[DataProcessor] = []
+
+    def register_processor(self, proc: DataProcessor) -> None:
+        self.registered_processors.append(proc)
+
+    def process_stream(self, stream: list[typing.Any]) -> None:
+        for i in stream:
+            for j in self.registered_processors:
+                if j.validate(i):
+                    j.ingest(i)
+                    print(f"me comi {i}")
+
+    def print_processors_stats(self) -> None:
+        pass
+
+
 class DataProcessor(abc.ABC):
 
     def __init__(self) -> None:
@@ -115,56 +133,15 @@ class LogProcessor(DataProcessor):
 
 
 def main() -> None:
-    print("=== Code Nexus Data Processor ===")
+    print("=== Code Nexus - Data Stream ===\n")
+    print("Initialize Data Stream...")
+    print("== DataStream statistics ==")
 
-    print("\nTesting Numeric Processor...")
-    num_proc = NumericProcessor()
-
-    print(f"Trying to validate input '42': {num_proc.validate(42)}")
-    print(f"Trying to validate input 'Hello': {num_proc.validate('Hello')}")
-
-    print("Test invalid ingestion of string 'foo' without prior validation:")
-    try:
-        num_proc.ingest("foo")
-    except Exception as error:
-        print(f"Got exception: {error}")
-
-    lista_numeros: list = [1, 2, 3, 4, 5]
-    print(f"Processing data: {lista_numeros}")
-    num_proc.ingest(lista_numeros)
-
-    print("Extracting 3 values...")
-    for i in range(3):
-        rango, valor = num_proc.output()
-        print(f"Numeric value {rango}: {valor}")
-
-    print("\nTesting Text Processor...")
-    text_proc = TextProcessor()
-    print(f"Trying to validate input '42': {text_proc.validate(42)}")
-
-    lista_textos: list = ['Hello', 'Nexus', 'World']
-    print(f"Processing data: {lista_textos}")
-    text_proc.ingest(lista_textos)
-
-    print("Extracting 1 value...")
-    rango, valor = text_proc.output()
-    print(f"Text value {rango}: {valor}")
-
-    print("\nTesting Log Processor...")
-    log_proc = LogProcessor()
-    print(f"Trying to validate input 'Hello': {log_proc.validate('Hello')}")
-
-    lista_diccionarios: list = [
-        {'log_level': 'NOTICE', 'log_message': 'Connection to server'},
-        {'log_level': 'ERROR', 'log_message': 'Unauthorized access!!!'}
-    ]
-    print(f"Processing data: {lista_diccionarios}")
-    log_proc.ingest(lista_diccionarios)
-
-    print("Extracting 2 values...")
-    for i in range(2):
-        rango, valor = log_proc.output()
-        print(f"Log entry {rango}: {valor}")
+    lista = ['hola', 'tete']
+    maquina = TextProcessor()
+    test = DataStream()
+    test.register_processor(maquina)
+    test.process_stream(lista)
 
 
 if __name__ == "__main__":
