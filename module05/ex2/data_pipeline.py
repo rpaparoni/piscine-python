@@ -2,6 +2,41 @@ import abc
 import typing
 
 
+class ExportPlugin(typing.Protocol):
+    """
+    Este es el molde (Protocol). Obliga a cualquier clase que actúe como plugin
+    a tener exactamente este método.
+    """
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        pass
+
+
+class CsvExport:
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        print("CSV Output:")
+        # Extraemos solo el texto (índice 1 de la tupla) de cada elemento
+        values: list[str] = [item[1] for item in data]
+
+        # Unimos todos los textos con una coma y un espacio
+        csv_string: str = ", ".join(values)
+        print(csv_string)
+
+
+class JsonExport:
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        print("JSON Output:")
+        json_parts: list[str] = []
+
+        # Recorremos la lista de tuplas desempaquetando el rango y el valor
+        for rank, value in data:
+            # Construimos la estructura clave-valor a mano
+            json_parts.append(f'"item_{rank}": "{value}"')
+
+        # Unimos todo con comas y lo envolvemos en llaves
+        json_string: str = "{" + ", ".join(json_parts) + "}"
+        print(json_string)
+
+
 class DataStream:
     def __init__(self) -> None:
         self.registered_processors: list[DataProcessor] = []
@@ -31,6 +66,24 @@ class DataStream:
                 remaining: int = len(proc._data)
 
                 print(f"{proc_name}: total {total_processed} items processed, remaining {remaining} on processor")
+
+    def output_pipeline(self, nb: int, plugin: ExportPlugin) -> None:
+        # 1. Recorremos todos los procesadores registrados
+        for proc in self.registered_processors:
+            data_to_export: list[tuple[int, str]] = []
+
+            # 2. Intentamos sacar 'nb' elementos de cada uno
+            for _ in range(nb):
+                # Comprobamos que queden datos en la memoria para no causar un error
+                if len(proc._data) > 0:
+                    data_to_export.append(proc.output())
+                else:
+                    # Si ya no quedan datos, rompemos este bucle interno
+                    break
+
+            # 3. Si hemos conseguido sacar datos, se los mandamos al plugin
+            if data_to_export:
+                plugin.process_output(data_to_export)
 
 
 class DataProcessor(abc.ABC):
@@ -146,58 +199,45 @@ class LogProcessor(DataProcessor):
 
 
 def main() -> None:
-    print("=== Code Nexus Data Stream ===")
-    print("Initialize Data Stream...")
+    print("=== Code Nexus Data Pipeline ===")
 
-    # 1. Instanciamos el stream
+    # 1. Preparamos el terreno
     stream = DataStream()
+    stream.register_processor(NumericProcessor())
+    stream.register_processor(TextProcessor())
+    stream.register_processor(LogProcessor())
 
-    # 2. Imprimimos estadísticas vacías
-    print("== DataStream statistics ==")
-    stream.print_processors_stats()
-
-    # 3. Registramos SOLO el procesador numérico
-    print("Registering Numeric Processor...")
-    num_proc = NumericProcessor()
-    stream.register_processor(num_proc)
-
-    # 4. Preparamos el lote mixto de datos que pide el PDF
-    batch_1: list = [
-        'Hello world',
-        [3.14, 1, 2.71],
-        [{'log_level': 'WARNING', 'log_message':
-          'Telnet access! Use ssh instead'},
-         {'log_level': 'INFO', 'log_message': 'User wil is connected'}],
+    # 2. Creamos una buena comanda variada
+    batch: list = [
+        'First text',
         42,
-        ['Hi', 'five']
+        {'log_level': 'INFO', 'log_message': 'System started'},
+        [1, 2, 3],
+        ['Second text', 'Third text'],
+        [{'log_level': 'ERROR', 'log_message': 'Crash'}]
     ]
 
-    print(f"Send first batch of data on stream: {batch_1}")
-    stream.process_stream(batch_1)
-
-    print("== DataStream statistics ==")
+    print("--- Processing stream ---")
+    stream.process_stream(batch)
     stream.print_processors_stats()
 
-    print("Registering other data processors...")
-    text_proc = TextProcessor()
-    log_proc = LogProcessor()
-    stream.register_processor(text_proc)
-    stream.register_processor(log_proc)
+    # 3. Contratamos a nuestros dos exportadores
+    csv_plugin = CsvExport()
+    json_plugin = JsonExport()
 
-    print("Send the same batch again...")
-    stream.process_stream(batch_1)
-    print("== DataStream statistics ==")
+    # 4. Ponemos a prueba la pipeline sacando 2 elementos de cada maquina
+    print("\n--- Exporting 2 elements per processor via CSV ---")
+    # Pasamos '2' como cantidad y le damos nuestro plugin de CSV
+    stream.output_pipeline(2, csv_plugin)
+
+    print("\n== DataStream statistics after CSV export ==")
     stream.print_processors_stats()
 
-    print("Consume some elements from the data processors: Numeric 3, Text 2, Log 1")
-    for _ in range(3):
-        num_proc.output()
-    for _ in range(2):
-        text_proc.output()
-    for _ in range(1):
-        log_proc.output()
+    print("\n--- Exporting 2 elements per processor via JSON ---")
+    # Volvemos a pedir '2', pero esta vez le damos el plugin de JSON
+    stream.output_pipeline(2, json_plugin)
 
-    print("== DataStream statistics ==")
+    print("\n== Final DataStream statistics ==")
     stream.print_processors_stats()
 
 
