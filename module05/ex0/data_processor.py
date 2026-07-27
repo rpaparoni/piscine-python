@@ -109,7 +109,7 @@ class LogProcessor(DataProcessor):
         elif isinstance(data, list):
             for item in data:
 
-                log_str: str = f"{item['log_level']}: {item['log_message']}"
+                log_str = f"{item['log_level']}: {item['log_message']}"
                 self._data.append((self._rank_counter, log_str))
                 self._rank_counter += 1
 
@@ -129,9 +129,9 @@ def main() -> None:
     except Exception as error:
         print(f"Got exception: {error}")
 
-    lista_numeros: list = [1, 2, 3, 4, 5]
-    print(f"Processing data: {lista_numeros}")
-    num_proc.ingest(lista_numeros)
+    list_num: list = [1, 2, 3, 4, 5]
+    print(f"Processing data: {list_num}")
+    num_proc.ingest(list_num)
 
     print("Extracting 3 values...")
     for i in range(3):
@@ -142,13 +142,13 @@ def main() -> None:
     text_proc = TextProcessor()
     print(f"Trying to validate input '42': {text_proc.validate(42)}")
 
-    lista_textos: list = ['Hello', 'Nexus', 'World']
-    print(f"Processing data: {lista_textos}")
-    text_proc.ingest(lista_textos)
+    lsit_text: list = ['Hello', 'Nexus', 'World']
+    print(f"Processing data: {lsit_text}")
+    text_proc.ingest(lsit_text)
 
     print("Extracting 1 value...")
-    rango, valor = text_proc.output()
-    print(f"Text value {rango}: {valor}")
+    key, value = text_proc.output()
+    print(f"Text value {key}: {value}")
 
     print("\nTesting Log Processor...")
     log_proc = LogProcessor()
@@ -163,8 +163,8 @@ def main() -> None:
 
     print("Extracting 2 values...")
     for i in range(2):
-        rango, valor = log_proc.output()
-        print(f"Log entry {rango}: {valor}")
+        key, value = log_proc.output()
+        print(f"Log entry {key}: {value}")
 
 
 if __name__ == "__main__":

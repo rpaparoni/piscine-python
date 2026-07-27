@@ -2,37 +2,6 @@ import abc
 import typing
 
 
-class DataStream:
-    def __init__(self) -> None:
-        self.registered_processors: list[DataProcessor] = []
-
-    def register_processor(self, proc: DataProcessor) -> None:
-        self.registered_processors.append(proc)
-
-    def process_stream(self, stream: list[typing.Any]) -> None:
-        for item in stream:
-            procesado: bool = False
-
-            for proc in self.registered_processors:
-                if proc.validate(item):
-                    proc.ingest(item)
-                    procesado = True
-                    break
-            if not procesado:
-                print(f"DataStream error: Can't process element in stream: {item}")
-
-    def print_processors_stats(self) -> None:
-        if len(self.registered_processors) == 0:
-            print("No processor found, no data")
-        else:
-            for proc in self.registered_processors:
-                proc_name: str = type(proc).__name__.replace("Processor", " Processor")
-                total_processed: int = proc._rank_counter
-                remaining: int = len(proc._data)
-
-                print(f"{proc_name}: total {total_processed} items processed, remaining {remaining} on processor")
-
-
 class DataProcessor(abc.ABC):
 
     def __init__(self) -> None:
@@ -140,28 +109,60 @@ class LogProcessor(DataProcessor):
         elif isinstance(data, list):
             for item in data:
 
-                log_str: str = f"{item['log_level']}: {item['log_message']}"
+                log_str = f"{item['log_level']}: {item['log_message']}"
                 self._data.append((self._rank_counter, log_str))
                 self._rank_counter += 1
 
 
+class DataStream:
+    def __init__(self) -> None:
+        self.registered_processors: list[DataProcessor] = []
+
+    def register_processor(self, proc: DataProcessor) -> None:
+        self.registered_processors.append(proc)
+
+    def process_stream(self, stream: list[typing.Any]) -> None:
+        for item in stream:
+            procesado: bool = False
+
+            for proc in self.registered_processors:
+                if proc.validate(item):
+                    proc.ingest(item)
+                    procesado = True
+                    break
+            if not procesado:
+                print(
+                    "DataStream error: Can't"
+                    f"  process element in stream: {item}"
+                    )
+
+    def print_processors_stats(self) -> None:
+        if len(self.registered_processors) == 0:
+            print("No processor found, no data\n")
+        else:
+            for proc in self.registered_processors:
+                proc_name: str = type(proc).__name__.replace("Processor",
+                                                             " Processor")
+                total_processed: int = proc._rank_counter
+                remaining: int = len(proc._data)
+
+                print(f"{proc_name}: total {total_processed} "
+                      f"items processed, remaining {remaining} on processor")
+
+
 def main() -> None:
-    print("=== Code Nexus Data Stream ===")
+    print("=== Code Nexus Data Stream ===\n")
     print("Initialize Data Stream...")
 
-    # 1. Instanciamos el stream
     stream = DataStream()
 
-    # 2. Imprimimos estadísticas vacías
     print("== DataStream statistics ==")
     stream.print_processors_stats()
 
-    # 3. Registramos SOLO el procesador numérico
-    print("Registering Numeric Processor...")
+    print("Registering Numeric Processor\n")
     num_proc = NumericProcessor()
     stream.register_processor(num_proc)
 
-    # 4. Preparamos el lote mixto de datos que pide el PDF
     batch_1: list = [
         'Hello world',
         [3.14, 1, 2.71],
@@ -178,7 +179,7 @@ def main() -> None:
     print("== DataStream statistics ==")
     stream.print_processors_stats()
 
-    print("Registering other data processors...")
+    print("\nRegistering other data processors...")
     text_proc = TextProcessor()
     log_proc = LogProcessor()
     stream.register_processor(text_proc)
@@ -189,7 +190,8 @@ def main() -> None:
     print("== DataStream statistics ==")
     stream.print_processors_stats()
 
-    print("Consume some elements from the data processors: Numeric 3, Text 2, Log 1")
+    print("\nConsume some elements from the data "
+          "processors: Numeric 3, Text 2, Log 1")
     for _ in range(3):
         num_proc.output()
     for _ in range(2):
