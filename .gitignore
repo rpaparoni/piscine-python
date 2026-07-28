@@ -1,0 +1,4 @@
+.mypy_cache
+module06/alchemy/grimoire/__pycache__
+module06/alchemy/transmutation/__pycache__
+*/__pycache__
