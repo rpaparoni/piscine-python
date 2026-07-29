@@ -10,7 +10,7 @@ class Sproutling(Creature, HealCapability):
         return f"{self.name} uses Vine Whip!"
 
     def heal(self):
-        return " heals itself and others for a small amount"
+        return f"{self.name} heals itself and others for a small amount"
 
 
 class Bloomelle(Creature, HealCapability):
@@ -21,7 +21,7 @@ class Bloomelle(Creature, HealCapability):
         return f"{self.name} uses Petal Dance!"
 
     def heal(self):
-        return " heals itself and others for a large amount"
+        return f"{self.name} heals itself and others for a large amount"
 
 
 class HealingCreatureFactory(CreatureFactory):
@@ -35,39 +35,41 @@ class HealingCreatureFactory(CreatureFactory):
 class Shiftling(Creature, TransformCapability):
     def __init__(self):
         super().__init__("Shiftling", "Normal")
+        self.is_trans = False
 
     def attack(self):
-        if self.is_trans:
-            return "atacks normally."
+        if self.is_trans is False:
+            return f"{self.name} atacks normally."
         else:
-            return "performs a boosted strike!"
+            return f"{self.name} performs a boosted strike!"
 
     def transform(self):
         self.is_trans = True
-        return "shifts into a sharper form!"
+        return f"{self.name} shifts into a sharper form!"
 
     def revert(self):
         self.is_trans = False
-        return "returns to normal."
+        return f"{self.name} returns to normal."
 
 
 class Morphagon(Creature, TransformCapability):
     def __init__(self):
         super().__init__("Morphagon", "Normal/Dragon")
+        self.is_trans = False
 
     def attack(self):
-        if self.is_trans:
-            return "atacks normally."
+        if self.is_trans is False:
+            return f"{self.name} atacks normally."
         else:
-            return "unleashes a devastating morph strike!"
+            return f"{self.name} unleashes a devastating morph strike!"
 
     def transform(self):
         self.is_trans = True
-        return "morphs into a dragonic battle form!"
+        return f"{self.name} morphs into a dragonic battle form!"
 
     def revert(self):
         self.is_trans = False
-        return "stabilizes its form."
+        return f"{self.name} stabilizes its form."
 
 
 class TransformCreatureFactory(CreatureFactory):
