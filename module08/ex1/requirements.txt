@@ -2,4 +2,4 @@ pandas
 numpy
 matplotlib
 requests
-# python-dotenv==1.2.2
+# python-dotenv

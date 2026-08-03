@@ -1,15 +1,16 @@
 [tool.poetry]
-name = "matrix-loading"
-version = "3.0.0"
-description = "Loading programs into the Matrix"
-authors = ["Csenge Kakula <csekakul@student.42madrid.com>"]
-package-mode = false
+name = "ex1"
+version = "0.1.0"
+description = ""
+authors = ["rpaparoni <paparoniricardo@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 pandas = "2.1.0"
 numpy = "1.25.0"
 matplotlib = "3.7.2"
+
+[tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
