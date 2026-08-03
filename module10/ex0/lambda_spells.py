@@ -1,5 +1,6 @@
 from typing import List, Dict, Any
 
+
 def artifact_sorter(artifacts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return sorted(artifacts, key=lambda artifact: artifact['power'], reverse=True)
 
@@ -41,4 +42,3 @@ if __name__ == "__main__":
     print(f"{spell_transformer(artifacts)}")
     print("\nTesting mage stats..")
     print(f"{mage_stats(artifacts)}")
-    
